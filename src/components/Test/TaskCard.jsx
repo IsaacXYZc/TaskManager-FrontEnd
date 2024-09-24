@@ -1,6 +1,6 @@
 import axios from "axios";
-import { API_BASE_URL } from "../Services/api";
 import { useState } from "react";
+const apiUrl = import.meta.env.VITE_API_BASE_URL;
 
 export default function TaskCard({ task, onEdit ,   onDelete}){
   const {id, title, description, priority, createdAt, modifiedAt, completed} = task;
@@ -35,7 +35,7 @@ export default function TaskCard({ task, onEdit ,   onDelete}){
   
   const handleSave = async (updatedTask) => {
     await axios.put(
-      API_BASE_URL+`/tasks/${id}`,
+      apiUrl+`/tasks/${id}`,
       {
         title: updatedTask.title,
         description: updatedTask.description,
