@@ -1,7 +1,6 @@
 import axios from "axios";
 import { API_BASE_URL } from "../Services/api";
 import { useState } from "react";
-import EditTaskModal from "./EditTaskModal";
 
 export default function TaskCard({ task, onEdit ,   onDelete}){
   const {id, title, description, priority, createdAt, modifiedAt, completed} = task;

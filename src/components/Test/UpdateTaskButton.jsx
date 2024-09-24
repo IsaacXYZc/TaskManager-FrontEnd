@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import EditTaskModal from './EditTaskModal';
 import axios from 'axios';
-import { API_BASE_URL } from '../Services/api';
+const apiUrl = import.meta.env.VITE_API_BASE_URL;
+
 
 const UpdateTaskButton = ({ task, onTaskUpdated }) => {
   const [isModalOpen, setModalOpen] = useState(false);
 
   const handleSave = async (updatedTask) => {
     try {
-      const response = await axios.put(`${API_BASE_URL}/tasks/${task.id}`, {
+      const response = await axios.put(`${apiUrl}/tasks/${task.id}`, {
         title: updatedTask.title,
         description: updatedTask.description,
         priority: updatedTask.priority,

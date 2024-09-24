@@ -1,14 +1,15 @@
 import { useState } from 'react';
-import EditTaskModal from './EditTaskModal'; // Asegúrate de que esta ruta sea correcta
+import EditTaskModal from './EditTaskModal';
 import axios from 'axios';
-import { API_BASE_URL } from '../Services/api';
+const apiUrl = import.meta.env.VITE_API_BASE_URL;
+
 
 const CreateTaskButton = ({ onTaskCreated }) => {
   const [isModalOpen, setModalOpen] = useState(false);
 
   const handleSave = async (newTask) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/tasks`, newTask, {
+      const response = await axios.post(`${apiUrl}/tasks`, newTask, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`

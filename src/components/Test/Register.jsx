@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { API_BASE_URL } from "../Services/api";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -25,7 +24,7 @@ const handleSubmit = async (e) => {
   setLoading(true);
   setError('');
   await axios.post(
-    API_BASE_URL+"/auth/signup",{
+    REACT_APP_API_URL+"/auth/signup",{
       username,
       email,
       password

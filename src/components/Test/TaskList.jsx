@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { API_BASE_URL } from "../Services/api";
 import axios from "axios";
 import TaskCard from "./TaskCard";
 import UpdateTaskButton from "./UpdateTaskButton";
 import DeleteTaskButton from "./DeleteTaskButton";
 import CreateTaskButton from "./CreateTaskButton";
+const apiUrl = import.meta.env.VITE_API_BASE_URL;
+
 
 const TaskList = () => {
   const [tasks, setTasks] = useState([]);
@@ -13,7 +14,7 @@ const TaskList = () => {
   useEffect(() => {
     const fetchData = async () => {
       await axios.get(
-        API_BASE_URL+"/tasks",
+        apiUrl+"/tasks",
       {
         headers: {
           'Content-Type': 'application/json',
