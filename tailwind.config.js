@@ -22,7 +22,8 @@ export default {
         error: '#f55',
       },
       boxShadow: {
-        'custom-2xl': '0px 0px 50px rgba(0, 0, 0, 9)',
+        'custom-2xl': '0px 0px 50px rgba(0, 0, 0, 9',
+        'custom-xl': '0px 0px 10px rgba(40, 40, 40, 2)'
       },
     },
   },

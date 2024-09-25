@@ -24,7 +24,7 @@ const CreateTaskButton = ({ onTaskCreated }) => {
 
   return (
     <>
-      <button onClick={() => setModalOpen(true)} className="bg-primary rounded p-2">
+      <button onClick={() => setModalOpen(true)} className="bg-blue-500 text-white rounded p-2">
         Crear Tarea
       </button>
       <EditTaskModal 

@@ -18,8 +18,8 @@ const DeleteTaskButton = ({ task, onTaskDeleted }) => {
   };
 
   return (
-    <button onClick={handleDelete} className="bg-error rounded p-2">
-      Eliminar Tarea
+    <button onClick={handleDelete} className="bg-red-500 text-white rounded p-2">
+      Eliminar 🗑
     </button>
   );
 };

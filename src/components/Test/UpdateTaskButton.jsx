@@ -29,8 +29,8 @@ const UpdateTaskButton = ({ task, onTaskUpdated }) => {
 
   return (
     <>
-      <button onClick={() => setModalOpen(true)} className="bg-primary rounded p-2">
-        Actualizar Tarea
+      <button onClick={() => setModalOpen(true)} className="bg-blue-500 text-white rounded p-2">
+       Editar✍
       </button>
       <EditTaskModal 
         isOpen={isModalOpen} 

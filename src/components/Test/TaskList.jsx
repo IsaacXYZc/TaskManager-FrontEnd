@@ -4,12 +4,14 @@ import TaskCard from "./TaskCard";
 import UpdateTaskButton from "./UpdateTaskButton";
 import DeleteTaskButton from "./DeleteTaskButton";
 import CreateTaskButton from "./CreateTaskButton";
+import { useNavigate } from "react-router-dom";
 const apiUrl = import.meta.env.VITE_API_BASE_URL;
 
 
 const TaskList = () => {
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -59,9 +61,14 @@ const TaskList = () => {
   const handleTaskDeleted = (id) => {
     setTasks(tasks.filter(task => task.id !== id));
   };
+  const exitButton = () => {
+    navigate("/login");
+    localStorage.clear('token');
+  } 
 
   return (
-  <div className="overflow-hidden bg-background text-center text-align-center py-6">
+  <div className="overflow-hidden bg-background min-h-screen text-center text-align-center py-6">
+    <button  onClick={exitButton} className="absolute sm:left-20 left-0 text-xl hover:underline rounded border-black px-2" >Cerrar sesión</button>
     <h1 className="text-3xl font-bold mb-6">LISTA DE TAREAS</h1>
     {error ? 
     (
