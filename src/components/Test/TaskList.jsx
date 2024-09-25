@@ -5,8 +5,7 @@ import UpdateTaskButton from "./UpdateTaskButton";
 import DeleteTaskButton from "./DeleteTaskButton";
 import CreateTaskButton from "./CreateTaskButton";
 import { useNavigate } from "react-router-dom";
-const apiUrl = import.meta.env.VITE_API_BASE_URL;
-
+import { API_BASE_URL } from "../../api/apiUrl";
 
 const TaskList = () => {
   const [tasks, setTasks] = useState([]);
@@ -16,7 +15,7 @@ const TaskList = () => {
   useEffect(() => {
     const fetchData = async () => {
       await axios.get(
-        apiUrl+"/tasks",
+        API_BASE_URL+"/tasks",
       {
         headers: {
           'Content-Type': 'application/json',

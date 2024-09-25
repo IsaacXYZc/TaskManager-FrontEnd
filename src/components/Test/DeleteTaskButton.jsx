@@ -1,11 +1,10 @@
 import axios from 'axios';
-const apiUrl = import.meta.env.VITE_API_BASE_URL;
-
+import { API_BASE_URL } from '../../api/apiUrl';
 
 const DeleteTaskButton = ({ task, onTaskDeleted }) => {
   const handleDelete = async () => {
     try {
-      await axios.delete(`${apiUrl}/tasks/${task.id}`, {
+      await axios.delete(`${API_BASE_URL}/tasks/${task.id}`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import EditTaskModal from './EditTaskModal';
 import axios from 'axios';
-const apiUrl = import.meta.env.VITE_API_BASE_URL;
+import { API_BASE_URL } from '../../api/apiUrl';
 
 
 const CreateTaskButton = ({ onTaskCreated }) => {
@@ -9,7 +9,7 @@ const CreateTaskButton = ({ onTaskCreated }) => {
 
   const handleSave = async (newTask) => {
     try {
-      const response = await axios.post(`${apiUrl}/tasks`, newTask, {
+      const response = await axios.post(`${API_BASE_URL}/tasks`, newTask, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`

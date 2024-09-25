@@ -1,0 +1,1 @@
+export const API_BASE_URL="https://api-task-b0eadwf0exe3gufk.canadacentral-01.azurewebsites.net/api/v1"
