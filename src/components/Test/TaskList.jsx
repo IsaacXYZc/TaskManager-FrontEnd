@@ -14,29 +14,38 @@ const TaskList = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      await axios.get(
-        API_BASE_URL+"/tasks",
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      })
-      .then(function (response) {
-        setTasks(response.data);
-        console.log(response.data);
-      })
-      .catch(function (){
-        let errorMessage = "Error desconocido";
-        if (error.response) {
-          errorMessage = error.response.data;
-        } else if (error.request) {
-          errorMessage = "No se recibió respuesta del servidor";
-        } else {
-          errorMessage = error.message;
-        }
-        setError(errorMessage);
-      })
+      if(!localStorage.getItem('token')) {
+        setError("No autorizado.")
+        setTimeout(() => {
+          alert('No has iniciado sesión');
+          console.log("Mensaje")
+          navigate("/login")
+        }, 1000);
+      } else {
+        await axios.get(
+          API_BASE_URL+"/tasks",
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        })
+        .then(function (response) {
+          setTasks(response.data);
+          console.log(response.data);
+        })
+        .catch(function (){
+          let errorMessage = "Error desconocido";
+          if (error.response) {
+            errorMessage = error.response.data;
+          } else if (error.request) {
+            errorMessage = "No se recibió respuesta del servidor";
+          } else {
+            errorMessage = error.message;
+          }
+          setError(errorMessage);
+        })
+    }
     };
     fetchData();
   }, []);
