@@ -3,7 +3,6 @@ import Login from './components/Test/Login';
 import Register from './components/Test/Register';
 import TaskList from './components/Test/TaskList';
 
-
 function App() {
   return (
     <Router>

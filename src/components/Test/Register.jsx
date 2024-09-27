@@ -61,7 +61,7 @@ const handleSubmit = async (e) => {
         <form onSubmit={handleSubmit} className="flex flex-col gap-4 text-white">
           <div className="font-semibold text-primary text-2xl mb-2 text-center">Iniciar Sesión</div>
           {loading && <div className="flex justify-center mb-4">
-              <img src="/spin.svg" className="animate-spin w-12 h-12" alt="Descripción de la imagen" />
+              <img src="/spin.svg" className="animate-spin w-12 h-12" alt="Icono de carga" />
             </div>}
           {error && <p className="text-error font-semibold">{error}</p>}
           <div className="relative group mt-6">

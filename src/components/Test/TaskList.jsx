@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import TaskCard from "./TaskCard";
-import UpdateTaskButton from "./UpdateTaskButton";
-import DeleteTaskButton from "./DeleteTaskButton";
 import CreateTaskButton from "./CreateTaskButton";
 import { useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../../api/apiUrl";
@@ -10,6 +8,11 @@ import { API_BASE_URL } from "../../api/apiUrl";
 const TaskList = () => {
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState('');
+  const [sortBy, setSortBy] = useState('createdAt-desc');
+  const [shouldSort, setShouldSort] = useState(false);
+  const pendingTasks = tasks.filter(task => task.status === 1);
+  const inProgressTasks = tasks.filter(task => task.status === 2);
+  const completedTasks = tasks.filter(task => task.status === 3);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,7 +26,7 @@ const TaskList = () => {
         }, 1000);
       } else {
         await axios.get(
-          API_BASE_URL+"/tasks",
+          API_BASE_URL+"/tasks/sorted",
         {
           headers: {
             'Content-Type': 'application/json',
@@ -50,52 +53,125 @@ const TaskList = () => {
     fetchData();
   }, []);
 
-  const handleEdit = (updatedTask) => {
-    setTasks((prevTasks) =>
-      prevTasks.map((task) =>
-        task.id === updatedTask.id ? updatedTask : task
-      )
-    );
+  useEffect(() => {
+    if (shouldSort) {
+      handleSort(sortBy);
+    }
+  }, [shouldSort]);
+
+  const handleTaskCreated = async (newTask) => {
+    await setShouldSort(true);
+    setTasks( [...tasks, newTask]);
   };
 
-  const handleTaskCreated = (newTask) => {
-    setTasks([...tasks, newTask]);
-  };
-
-  const handleTaskUpdated = (updatedTask) => {
-    setTasks(tasks.map(task => (task.id === updatedTask.id ? updatedTask : task)));
+  const handleTaskUpdated = async (updatedTask) => {
+    await setTasks(tasks.map(task => (task.id === updatedTask.id ? updatedTask : task)));
+    setShouldSort(true);
   };
 
   const handleTaskDeleted = (id) => {
     setTasks(tasks.filter(task => task.id !== id));
   };
-  const exitButton = () => {
+  const handleLogout = () => {
     navigate("/login");
     localStorage.clear('token');
   } 
 
+  const handleSort = (sortBy) => {
+    setSortBy(sortBy);
+    const [atribute, direction] = sortBy.split('-');
+    const sortedTasks = [...tasks].sort( (a,b) => {
+      if (a[atribute] < b[atribute]) return direction === 'asc' ? -1 : 1;
+      if (a[atribute] > b[atribute]) return direction === 'asc' ? 1 : -1;
+      return 0;
+    })
+    setShouldSort(false);
+    setTasks(sortedTasks);
+  }
   return (
-  <div className="overflow-hidden bg-background min-h-screen text-center text-align-center py-6">
-    <button  onClick={exitButton} className="absolute sm:left-20 left-0 text-xl hover:underline rounded border-black px-2" >Cerrar sesión</button>
-    <h1 className="text-3xl font-bold mb-6">LISTA DE TAREAS</h1>
+  <div className="">
+    <div className="flex justify-between">
+      <h1 className="text-xl font-semibold">Lista de tareas</h1>
+      <select
+        value={sortBy}
+        onChange={(e) => handleSort(e.target.value)}
+        className="border rounded"
+      >
+        <option value="createdAt-desc">Creadas más recientemente</option>
+        <option value="createdAt-asc">Creadas hace más tiempo</option>
+        <option value="priority-desc">Mas importantes primero</option>
+        <option value="priority-asc">Menos importantes primero</option>
+      </select>
+      <button  onClick={handleLogout} className=" text-lg hover:underline rounded border-black " >Cerrar sesión</button>
+    </div>
     {error ? 
     (
       <p className="text-red-600 font-semibold">{error}</p>
     ):( 
-      <div>
-        <CreateTaskButton onTaskCreated={handleTaskCreated} />
-        <ul className="flex flex-wrap justify-center">
-          {tasks.map( task => (
-            <li key={task.id}> 
-              <TaskCard key={task.id} task={task}
-              />
-              <div className="flex gap-4">
-                <UpdateTaskButton task={task} onTaskUpdated={handleTaskUpdated} />
-                <DeleteTaskButton task={task} onTaskDeleted={handleTaskDeleted} />
-              </div>
-            </li>
-          ))}
-        </ul>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <div className="bg-red-500 min-h-screen">
+          <div className="flex flex-wrap gap-6 justify-center text-white w-full shadow-lg py-2">
+            <p className="text-4xl">Pendientes</p> 
+            <CreateTaskButton 
+            status={1}
+            onCreated={handleTaskCreated}
+            />
+          </div>
+          <ul className="flex flex-wrap place-content-around">
+            {pendingTasks.map( task => (
+              <li key={task.id}> 
+                <TaskCard 
+                key={task.id} 
+                task={task} 
+                onUpdated={handleTaskUpdated} 
+                onDeleted={handleTaskDeleted}
+                />
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="bg-blue-500 min-h-screen">
+        <div className="flex flex-wrap gap-6 justify-center text-white w-full shadow-lg py-2">
+            <p className="text-4xl">En progreso</p> 
+            <CreateTaskButton 
+            status={2}
+            onCreated={handleTaskCreated}
+            />
+          </div>
+          <ul className="flex flex-wrap place-content-around">
+            {inProgressTasks.map( task => (
+              <li key={task.id}> 
+                <TaskCard 
+                key={task.id} 
+                task={task} 
+                onUpdated={handleTaskUpdated} 
+                onDeleted={handleTaskDeleted}
+                />
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="bg-green-400 min-h-screen">
+        <div className="flex flex-wrap gap-6 justify-center text-white w-full shadow-lg py-2">
+            <p className="text-4xl">Completadas</p> 
+            <CreateTaskButton 
+            status={3}
+            onCreated={handleTaskCreated}
+            />
+          </div>
+          <ul className="flex flex-wrap place-content-around">
+            {completedTasks.map( task => (
+              <li key={task.id}> 
+                <TaskCard 
+                key={task.id} 
+                task={task} 
+                onUpdated={handleTaskUpdated} 
+                onDeleted={handleTaskDeleted}
+                />
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     )} 
   </div>

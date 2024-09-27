@@ -4,7 +4,7 @@ import axios from 'axios';
 import { API_BASE_URL } from '../../api/apiUrl';
 
 
-const UpdateTaskButton = ({ task, onTaskUpdated }) => {
+const UpdateTaskButton = ({ task, onUpdated }) => {
   const [isModalOpen, setModalOpen] = useState(false);
 
   const handleSave = async (updatedTask) => {
@@ -13,14 +13,14 @@ const UpdateTaskButton = ({ task, onTaskUpdated }) => {
         title: updatedTask.title,
         description: updatedTask.description,
         priority: updatedTask.priority,
-        completed: updatedTask.completed
+        status: updatedTask.status
       }, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
-      onTaskUpdated(response.data);
+      onUpdated(response.data);
       setModalOpen(false);
     } catch (error) {
       console.error("Error updating task", error);
@@ -29,9 +29,9 @@ const UpdateTaskButton = ({ task, onTaskUpdated }) => {
 
   return (
     <>
-      <button onClick={() => setModalOpen(true)} className="bg-blue-500 text-white rounded p-2">
-       Editar✍
-      </button>
+      <a href="#" onClick={() => setModalOpen(true)}>
+        <img src="/edit.svg" className="w-6 hover:animate-wiggle" alt="icono de editar" />
+      </a>
       <EditTaskModal 
         isOpen={isModalOpen} 
         onClose={() => setModalOpen(false)} 

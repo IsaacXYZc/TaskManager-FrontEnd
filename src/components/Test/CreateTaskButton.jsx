@@ -1,10 +1,11 @@
+/* eslint-disable react/prop-types */
 import { useState } from 'react';
 import EditTaskModal from './EditTaskModal';
 import axios from 'axios';
 import { API_BASE_URL } from '../../api/apiUrl';
 
 
-const CreateTaskButton = ({ onTaskCreated }) => {
+const CreateTaskButton = ({ status, onCreated }) => {
   const [isModalOpen, setModalOpen] = useState(false);
 
   const handleSave = async (newTask) => {
@@ -15,7 +16,7 @@ const CreateTaskButton = ({ onTaskCreated }) => {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
-      onTaskCreated(response.data);
+      onCreated(response.data);
       setModalOpen(false);
     } catch (error) {
       console.error("Error creating task", error);
@@ -24,13 +25,13 @@ const CreateTaskButton = ({ onTaskCreated }) => {
 
   return (
     <>
-      <button onClick={() => setModalOpen(true)} className="bg-blue-500 text-white rounded p-2">
-        Crear Tarea
-      </button>
+      <a href="#" onClick={() => setModalOpen(true)}>       
+        <img src="/add.svg" className="w-10 hover:animate-wiggle" alt="icono de agregar" />
+      </a>
       <EditTaskModal 
         isOpen={isModalOpen} 
         onClose={() => setModalOpen(false)} 
-        task={{ title:"", description:"", priority:1, completed:false}} 
+        task={{ title:"", description:"", priority:1, status:status}} 
         onSave={handleSave} 
       />
     </>
