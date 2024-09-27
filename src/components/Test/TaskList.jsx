@@ -26,7 +26,7 @@ const TaskList = () => {
         }, 1000);
       } else {
         await axios.get(
-          API_BASE_URL+"/tasks/sorted",
+          API_BASE_URL+"/tasks",
         {
           headers: {
             'Content-Type': 'application/json',
